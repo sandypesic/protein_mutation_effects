@@ -1,7 +1,7 @@
 __pycache__/
 .ipynb_checkpoints/
 
-# Ignore everything else in data
+# Ignore everything else in data.
 data/*
 !data/DDG_DATA.csv
 !data/aaindex1.txt
@@ -9,7 +9,7 @@ data/*
 *.pkl
 .env
 
-# Ignore old notebooks
+# Ignore old notebooks.
 00_explorations.ipynb
 01_random_forest.ipynb
 02_improved_feature_engineering.ipynb
