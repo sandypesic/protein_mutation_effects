@@ -46,7 +46,7 @@ Feature generation is modularized in `src/feature_utils.py`.
 - Clean train/validation/test separation.
 - Class imbalance handled via class weighting or downsampling.
 - Metrics tracked: accuracy, precision, recall, ROC-AUC, and PR.
-- Evaluation plots and metrics saved in results/ for reproducibility.
+- Evaluation plots and metrics saved in `results/` for reproducibility.
 
 ---
 
