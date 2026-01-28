@@ -68,6 +68,7 @@ protein-mutation-effects/
 │   └── feature_utils.py
 │   └── model_utils.py
 │   └── train_utils.py
+├── .gitattributes
 ├── .gitignore
 ├── README.md
 └── requirements.txt
