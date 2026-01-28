@@ -1,0 +1,18 @@
+__pycache__/
+.ipynb_checkpoints/
+
+# Ignore everything else in data
+data/*
+!data/DDG_DATA.csv
+!data/aaindex1.txt
+
+*.pkl
+.env
+
+# Ignore old notebooks
+00_explorations.ipynb
+01_random_forest.ipynb
+02_improved_feature_engineering.ipynb
+03_structural_features.ipynb
+04_aaindex_and_xgboost.ipynb
+05_tensorflow.ipynb
