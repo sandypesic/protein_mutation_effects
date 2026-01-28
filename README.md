@@ -54,6 +54,7 @@ Feature generation is modularized in `src/feature_utils.py`.
 
 ```
 protein-mutation-effects/
+├── data/
 ├── notebooks/
 │   └── final_analysis.ipynb
 ├── results/
