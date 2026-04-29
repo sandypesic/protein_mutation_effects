@@ -1,56 +1,65 @@
 # Protein Mutation Effects
 
-This project predicts the functional impact of single amino acid substitutions in proteins using machine learning and physicochemical feature representations.
-
-The goal is to build a clean, interpretable baseline pipeline integrating biological priors with modern ML workflows.
+A machine learning pipeline for predicting the stability impact of single amino acid substitutions in proteins, using physicochemical feature representations and experimentally measured ΔΔG labels.
 
 ---
 
-# Motivation
+## Motivation
 
-Predicting whether a mutation stabilizes or destabilizes a protein is central to protein engineering and disease biology.
+Predicting whether a mutation stabilizes or destabilizes a protein is central to protein engineering and disease biology. Random mutations are overwhelmingly destabilizing in nature, but curated experimental databases like FireProtDB reflect the opposite distribution, as researchers preferentially study and publish stabilizing mutations. This selection bias is an important consideration when interpreting model performance and generalizability.
 
 This project investigates whether physicochemical descriptors (AAindex) and delta-encoding strategies (mutant - wild-type) provide useful inductive bias for learning mutation effects, beyond simple categorical mutation representations.
 
 ---
 
-# Data
+## Data
 
-Single-point protein mutations with experimentally measured stability labels.
+Source: [FireProtDB](https://loschmidt.chemi.muni.cz/fireprotdb/) — a curated database of experimentally measured protein stability changes for single-point mutations.
+
+- ~412,000 single-site substitutions after filtering
+- Binary stability label derived from ΔΔG (negative = stabilizing)
+- Class distribution: ~78% stabilizing, ~22% destabilizing (reflects experimental selection bias, not the broader mutational landscape)
 
 Preprocessing steps:
-- Removal of invalid or ambiguous mutations.
-- Stratified train/test split on stability labels.
-- Separate wild-type and mutant residue information.
+- Filtering to well-formed single-site substitutions
+- Stratified train/test split (80/20) preserving class ratio
+- Class imbalance handled via class weighting (preferred) or downsampling
 
 ---
 
-# Feature Engineering
+## Feature Engineering
 
-- Baseline features:
-    - One-hot encoding of wild-type and mutant amino acids.
-    - Mutation position.
-    - Structural/contextual metadata (B-factor, conservation scores).
+**Baseline features:**
+- One-hot encoding of wild-type and mutant amino acids
+- Mutation position
+- Structural/contextual metadata: B-factor, conservation scores
 
-- Physicochemical features:
-    - AAindex descriptors for wild-type and mutant residues.
-    - Delta encoding (mutant - wild-type).
+**Physicochemical features (AAindex):**
+- Five descriptors selected for biological relevance: hydrophobicity (KYTJ820101), secondary structure propensity (FAUJ880111), volume (CHAM810101), polarity (GRAR740102), hydrogen bonding (HOPT810101)
+- Delta encoding (mutant − wild-type) to capture the direction and magnitude of physicochemical change
 
 Feature generation is modularized in `src/feature_utils.py`.
 
 ---
 
-# Modeling
+## Modeling
 
-- Supervised classification model (fully-connected neural network).
-- Clean train/validation/test separation.
-- Class imbalance handled via class weighting or downsampling.
-- Metrics tracked: accuracy, precision, recall, ROC-AUC, and PR.
-- Evaluation plots and metrics saved in `results/` for reproducibility.
+A fully-connected neural network (128 → 64 → 1) with batch normalization, dropout regularization, and adaptive learning rate scheduling. A neural network was chosen over gradient boosting to capture potential nonlinear interactions between physicochemical features — an assumption validated by the performance gap over logistic regression.
+
+**Results:**
+
+| Model | AUC |
+|---|---|
+| Neural Network (this project) | 0.717 |
+| Random Forest (baseline) | 0.714 |
+| Logistic Regression (baseline) | 0.698 |
+| Majority Class (floor) | 0.500 |
+
+The neural network outperforms all baselines. The narrow margin over Random Forest is expected on tabular data with hand-crafted features; the more meaningful result is the gap over logistic regression suggesting the model captures nonlinear physicochemical interactions that a linear model cannot.
 
 ---
 
-# Project Structure
+## Project Structure
 
 ```
 protein-mutation-effects/
@@ -76,7 +85,7 @@ protein-mutation-effects/
 
 ---
 
-# Usage
+## Usage
 
 1. Install dependencies:
 `pip install -r requirements.txt`.
@@ -86,7 +95,8 @@ protein-mutation-effects/
 
 ---
 
-# Notes
+## Limitations & Future Work
 
-- The repository is a baseline reference for protein mutation effect prediction.
-- Designed for reproducibility and clarity, not competition-level performance.
+- Features are sequence- and structure-agnostic beyond B-factor and conservation — incorporating 3D structural context (e.g. via ESM embeddings or graph neural networks) would likely improve performance meaningfully
+- The dataset reflects experimental selection bias; performance on a more representative mutation distribution is unknown
+- Hyperparameter search was not performed; systematic tuning would be a natural next step

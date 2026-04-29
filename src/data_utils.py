@@ -87,22 +87,15 @@ def load_and_clean_data(
     return df
 
 def apply_downsampling(df, random_state=42):
-    """
-    ----
-    Downsample the majority class to match the minority class size.
-    ----
-    Used as an alternative to class weighting.
-    """
+    counts = df['stabilizing'].value_counts()
+    majority_label = counts.idxmax()
+    minority_label = counts.idxmin()
 
-    df_major = df[df['stabilizing'] == False]
-    df_minor = df[df['stabilizing'] == True]
+    df_major = df[df['stabilizing'] == majority_label]
+    df_minor = df[df['stabilizing'] == minority_label]
 
-    if len(df_major) > len(df_minor):
-        df_major_down = df_major.sample(n=len(df_minor), random_state=random_state)
-        df_balanced = pd.concat([df_major_down, df_minor])
-    else:
-        df_minor_down = df_minor.sample(n=len(df_major), random_state=random_state)
-        df_balanced = pd.concat([df_major, df_minor_down])
+    df_major_down = df_major.sample(n=len(df_minor), random_state=random_state)
+    df_balanced = pd.concat([df_major_down, df_minor])
 
     return df_balanced.sample(frac=1, random_state=random_state).reset_index(drop=True)
 
