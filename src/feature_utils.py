@@ -103,7 +103,10 @@ def aaindex_features(
 
         table = aaindex[idx]
 
-        wt_vals = df['WT'].map(lambda aa: table.get(aa, np.nan))
+        def _lookup(aa, table):
+            return table.get(aa, np.nan)
+
+        wt_vals = df['WT'].map(lambda aa, t=table: t.get(aa, np.nan))
         mut_vals = df['mutant'].map(lambda aa: table.get(aa, np.nan))
 
         block = pd.DataFrame({

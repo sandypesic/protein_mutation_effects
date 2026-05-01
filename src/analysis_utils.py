@@ -35,6 +35,10 @@ def compute_classification_scores(y_true, y_pred, y_prob) -> Dict[str, float]:
     }
     fpr, tpr, _ = roc_curve(y_true, y_prob)
     scores["roc_auc"] = auc(fpr, tpr)
+
+    precisions, recalls, _ = precision_recall_curve(y_true, y_prob)
+    scores["pr_auc"] = auc(recalls, precisions)
+
     return scores
 
 # Plot and save Keras training curve.
