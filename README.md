@@ -100,3 +100,4 @@ protein-mutation-effects/
 - Features are sequence- and structure-agnostic beyond B-factor and conservation — incorporating 3D structural context (e.g. via ESM embeddings or graph neural networks) would likely improve performance meaningfully
 - The dataset reflects experimental selection bias; performance on a more representative mutation distribution is unknown
 - Hyperparameter search was not performed; systematic tuning would be a natural next step
+- Train/test split is randomized across mutations rather than proteins; with only 186 unique proteins in FireProtDB, a protein-aware split produced insufficient test samples (~1,400 vs ~82,000) due to high variance in mutations per protein (median 9, mean 51); a protein-aware evaluation would be more rigorous but requires a dataset with greater protein diversity
