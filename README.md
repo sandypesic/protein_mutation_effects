@@ -50,7 +50,7 @@ A fully-connected neural network (128 → 64 → 1) with batch normalization, dr
 
 | Model | AUC |
 |---|---|
-| Neural Network (this project) | 0.7223 |
+| Neural Network (this project) | 0.7217 |
 | Random Forest (baseline) | 0.7213 |
 | Logistic Regression (baseline) | 0.6975 |
 | Majority Class (floor) | 0.500 |
@@ -95,14 +95,15 @@ protein-mutation-effects/
 
 ## Usage
 
-1. Install dependencies:
-`pip install -r requirements.txt`.
+1. Install dependencies: `pip install -r requirements.txt`.
 
-> **Apple Silicon users:** also install `tensorflow-macos` and `tensorflow-metal`. 
+2. TensorFlow installation:
+> **Standard installation (Windows/Linux/Intel Macs):** `pip install tensorflow==2.16.2`.
+> **Apple Silicon (M-series Macs):** `pip install tensorflow-macos tensorflow-metal`.
+> `tensorflow-metal` enables GPU acceleration through Apple's Metal backend.
 > See [Apple TensorFlow guide](https://developer.apple.com/metal/tensorflow-plugin/).
 
-2. Run the final analysis notebook:
-`jupyter notebook notebooks/final_analysis.ipynb`.
+3. Run the final analysis notebook: `jupyter notebook notebooks/final_analysis.ipynb`.
 
 ---
 
