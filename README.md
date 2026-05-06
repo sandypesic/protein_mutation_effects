@@ -50,14 +50,22 @@ A fully-connected neural network (128 → 64 → 1) with batch normalization, dr
 
 | Model | AUC |
 |---|---|
-| Neural Network (this project) | 0.717 |
-| Random Forest (baseline) | 0.714 |
-| Logistic Regression (baseline) | 0.698 |
+| Neural Network (this project) | 0.7223 |
+| Random Forest (baseline) | 0.7213 |
+| Logistic Regression (baseline) | 0.6975 |
 | Majority Class (floor) | 0.500 |
 
 The neural network outperforms all baselines. The narrow margin over Random Forest is expected on tabular data with hand-crafted features; the more meaningful result is the gap over logistic regression suggesting the model captures nonlinear physicochemical interactions that a linear model cannot.
 
 ---
+
+## Methods Rationale
+
+- Train/test split is randomized across mutations rather than proteins; with only 186 unique proteins in FireProtDB, a protein-aware split produced insufficient test samples (~1,400 vs ~82,000) due to high variance in mutations per protein (median 9, mean 51); a protein-aware evaluation would be more rigorous but requires a dataset with greater protein diversity
+- Ablation study results suggest that one-hot encodings and structural metadata (B-factor, conservation) drive the majority of predictive signal; AAindex physicochemical delta features contribute marginally to the full model, suggesting redundancy with the categorical amino acid encodings; this motivates future work incorporating richer structural representations (e.g. ESM embeddings) that may capture signal not encoded by identity alone
+- Permutation importance analysis reveals that structural context features — B-factor (local flexibility) and conservation score (evolutionary constraint) — contribute the most predictive signal, suggesting that *where* a mutation occurs matters more than *what* the substitution is; this motivates future incorporation of richer positional features such as solvent accessibility and contact number
+
+___
 
 ## Project Structure
 
@@ -90,6 +98,9 @@ protein-mutation-effects/
 1. Install dependencies:
 `pip install -r requirements.txt`.
 
+> **Apple Silicon users:** also install `tensorflow-macos` and `tensorflow-metal`. 
+> See [Apple TensorFlow guide](https://developer.apple.com/metal/tensorflow-plugin/).
+
 2. Run the final analysis notebook:
 `jupyter notebook notebooks/final_analysis.ipynb`.
 
@@ -100,4 +111,3 @@ protein-mutation-effects/
 - Features are sequence- and structure-agnostic beyond B-factor and conservation — incorporating 3D structural context (e.g. via ESM embeddings or graph neural networks) would likely improve performance meaningfully
 - The dataset reflects experimental selection bias; performance on a more representative mutation distribution is unknown
 - Hyperparameter search was not performed; systematic tuning would be a natural next step
-- Train/test split is randomized across mutations rather than proteins; with only 186 unique proteins in FireProtDB, a protein-aware split produced insufficient test samples (~1,400 vs ~82,000) due to high variance in mutations per protein (median 9, mean 51); a protein-aware evaluation would be more rigorous but requires a dataset with greater protein diversity
