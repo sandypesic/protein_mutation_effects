@@ -98,10 +98,10 @@ protein-mutation-effects/
 1. Install dependencies: `pip install -r requirements.txt`.
 
 2. TensorFlow installation:
-> **Standard installation (Windows/Linux/Intel Macs):** `pip install tensorflow==2.16.2`.
-> **Apple Silicon (M-series Macs):** `pip install tensorflow-macos tensorflow-metal`.
-> `tensorflow-metal` enables GPU acceleration through Apple's Metal backend.
-> See [Apple TensorFlow guide](https://developer.apple.com/metal/tensorflow-plugin/).
+    **Standard installation (Windows/Linux/Intel Macs):** `pip install tensorflow==2.16.2`.
+    **Apple Silicon (M-series Macs):** `pip install tensorflow-macos tensorflow-metal`.
+    `tensorflow-metal` enables GPU acceleration through Apple's Metal backend.
+    See [Apple TensorFlow guide](https://developer.apple.com/metal/tensorflow-plugin/).
 
 3. Run the final analysis notebook: `jupyter notebook notebooks/final_analysis.ipynb`.
 
